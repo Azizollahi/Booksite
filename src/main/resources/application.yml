@@ -1,2 +1,10 @@
 server:
   port: 8567
+spring:
+  autoconfigure:
+    exclude:
+      org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  data.mongodb:
+    host: localhost
+    port: 27017
+    database: book-site
