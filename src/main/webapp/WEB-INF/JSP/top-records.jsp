@@ -10,12 +10,14 @@
 				<span class="card-title">Reading statistics</span>
 					<table class="responsive-table striped highlight centered">
 						<thead>
-							<th>User Name</th>
-							<th>Book Name</th>
-							<th>Page</th>
-							<th>Improvements</th>
-							<th>Update time</th>
-							<th>Last time update</th>
+							<tr>
+								<th>User Name</th>
+								<th>Book Name</th>
+								<th>Page</th>
+								<th>Improvements</th>
+								<th>Update time</th>
+								<th>Last time update</th>
+							</tr>
 						</thead>
 						<tbody>
 							<tr>

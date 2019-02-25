@@ -8,10 +8,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping(path = "/profile")
 public class ProfileController {
-	@GetMapping(path = "/booksTable")
-	public ModelAndView booksTable(){
+	@GetMapping(path = "/topRecords")
+	public ModelAndView topRecords(){
 
-		return new ModelAndView("groupBooksTable"
+		return new ModelAndView("top-records"
 		);
 	}
 	@GetMapping(path = "/newRecord")
