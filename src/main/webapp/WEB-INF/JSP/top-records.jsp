@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="layout" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="topRecord" scope="request" type="application.models.TopRecordsModel"/>
 
 <layout:Layout>
 	<jsp:attribute name="title">Book reading fair share</jsp:attribute>
@@ -20,41 +22,43 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>Karami</td>
-								<td>OOA</td>
-								<td>At page 300</td>
-								<td>+46 pages</td>
-								<td>02/14/2019 08:34:12</td>
-								<td>02/13/2019 18:20:00</td>
-							</tr>
+							<c:forEach var = "i" begin = "0" end = "${topRecord.record.size()-1}">
+								<tr>
+									<td>${topRecord.record.get(i).readerName}</td>
+									<td>${topRecord.record.get(i).bookName}</td>
+									<td>${topRecord.record.get(i).pageNumber}</td>
+									<td>${topRecord.record.get(i).improvement}</td>
+									<td>${topRecord.record.get(i).updateTime}</td>
+									<td>${topRecord.record.get(i).lastUpdate}</td>
+								</tr>
+							</c:forEach>
 						</tbody>
 					</table>
 				<div class="section"></div>
 				<div class="row">
 					<div class="col s4">
-						<label for="totalReadingOfTheDay"><span>Average reading on a day</span></label>
-						<p id="totalReadingOfTheDay">1<%--#{totalReadingOfTheDay}--%></p>
+						<label for="averageReadingOnADay"><span>Average reading on a day</span></label>
+						<p id="averageReadingOnADay">${topRecord.averageReading}</p>
 					</div>
 					<div class="col s4">
 						<label for="totalReadingOfYesterday"><span>Total reading from last time</span></label>
-						<p id="totalReadingOfYesterday">1<%--#{totalReadingOfTheDay}--%></p>
+						<p id="totalReadingOfYesterday">${topRecord.totalReadingOfTheDay}</p>
 					</div>
 					<div class="col s4">
 						<label for="totalReadingOfTheWeek"><span>Total reading of the week</span></label>
-						<p id="totalReadingOfTheWeek">2<%--#{totalReadingOfTheWeek}--%></p>
+						<p id="totalReadingOfTheWeek">${topRecord.totalReadingOfTheWeek}</p>
 					</div>
 					<div class="col s4">
 						<label for="totalReadingOfTheMonth"><span>Total reading of the month</span></label>
-						<p id="totalReadingOfTheMonth">3<%--#{totalReadingOfTheMonth}--%></p>
+						<p id="totalReadingOfTheMonth">${topRecord.totalReadingOfTheMonth}</p>
 					</div>
 					<div class="col s4">
 						<label for="totalReadingOfTheYear"><span>Total reading of the year</span></label>
-						<p id="totalReadingOfTheYear">4<%--#{totalReadingOfTheYear}--%></p>
+						<p id="totalReadingOfTheYear">${topRecord.totalReadingOfTheYear}</p>
 					</div>
 					<div class="col s4">
 						<label for="totalReading"><span>Total reading</span></label>
-						<p id="totalReading">5<%--#{totalReading}--%></p>
+						<p id="totalReading">${topRecord.totalReading}</p>
 					</div>
 				</div>
 			</div>
