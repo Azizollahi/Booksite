@@ -33,11 +33,11 @@
 				<div class="section"></div>
 				<div class="row">
 					<div class="col s4">
-						<label for="totalReadingOfTheDay"><span>Total reading so far</span></label>
+						<label for="totalReadingOfTheDay"><span>Average reading on a day</span></label>
 						<p id="totalReadingOfTheDay">1<%--#{totalReadingOfTheDay}--%></p>
 					</div>
 					<div class="col s4">
-						<label for="totalReadingOfYesterday"><span>Total reading of last time</span></label>
+						<label for="totalReadingOfYesterday"><span>Total reading from last time</span></label>
 						<p id="totalReadingOfYesterday">1<%--#{totalReadingOfTheDay}--%></p>
 					</div>
 					<div class="col s4">
