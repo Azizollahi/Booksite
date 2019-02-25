@@ -10,7 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class ProfileController {
 	@GetMapping(path = "/booksTable")
 	public ModelAndView booksTable(){
-		return new ModelAndView("groupBooksTable");
+
+		return new ModelAndView("groupBooksTable"
+		);
 	}
 	@GetMapping(path = "/newRecord")
 	public ModelAndView newRecord(){
