@@ -1,7 +1,5 @@
 package azizollahi.web.app;
 
-import infrastructure.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,13 +7,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 		"azizollahi.web.app.config",
 		"application.controllers",
 		"infrastructure.repository",
-		"infrustracture.config",
-		"domain"
+		"infrastructure.config",
+		"domain",
+		"domain_service.top_records",
+		"domain_service_interfaces.top_records",
+		"infrastructure.config"
 })
 public class Application {
 
-	@Autowired
-	public Application(BookRepository repository){
+	public Application(){
+		SpringApplication.run(Application.class);
 	}
 	public static void main(String[] args){
 		SpringApplication.run(Application.class,args);

@@ -2,4 +2,7 @@ rootProject.name = 'booksite'
 include 'application'
 include 'Infrastructure'
 include 'domain'
+include 'DomainService'
+include 'domainServiceInterfaces'
+include 'Infrastructure.Config'
 
