@@ -17,11 +17,12 @@
 								<th>Book Name</th>
 								<th>Page</th>
 								<th>Improvements</th>
-								<th>Update time</th>
+								<th>Current Update time</th>
 								<th>Last time update</th>
 							</tr>
 						</thead>
 						<tbody>
+						<c:if test="${topRecord.record.size() > 0}">
 							<c:forEach var = "i" begin = "0" end = "${topRecord.record.size()-1}">
 								<tr>
 									<td>${topRecord.record.get(i).readerName}</td>
@@ -32,6 +33,7 @@
 									<td>${topRecord.record.get(i).lastUpdate}</td>
 								</tr>
 							</c:forEach>
+						</c:if>
 						</tbody>
 					</table>
 				<div class="section"></div>
