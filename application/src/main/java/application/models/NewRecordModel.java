@@ -1,10 +1,17 @@
 package application.models;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class NewRecordModel {
+	@NotNull
 	private String selectedBook;
+	@Min(0)
+	@Max(2000)
 	private long pageNumber;
+	private String errorName;
 	private List<String> books;
 
 	public String getSelectedBook() {
@@ -29,5 +36,13 @@ public class NewRecordModel {
 
 	public void setPageNumber(long pageNumber) {
 		this.pageNumber = pageNumber;
+	}
+
+	public String getErrorName() {
+		return errorName;
+	}
+
+	public void setErrorName(String errorName) {
+		this.errorName = errorName;
 	}
 }

@@ -36,6 +36,15 @@
 							<label for="page-number">Write the page number that you recorded so far</label>
 						</div>
 					</div>
+					<c:if test="${(newRecord.errorName != null) || (!newRecord.errorName.equals(\"\"))}">
+						<div class="row">
+							<div class="col s12">
+								<blockquote class="red-text">
+										${newRecord.errorName}
+								</blockquote>
+							</div>
+						</div>
+					</c:if>
 					<div class="row">
 						<div class="col s12 m2 push-m10 right-align">
 							<button class="btn waves-effect green" type="submit"><i class="material-icons right">send</i></button>

@@ -9,11 +9,13 @@ import infrastructure.repository.RecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.LinkedList;
 
 @Controller
@@ -44,19 +46,24 @@ public class ProfileController {
 		return viewAndModel;
 	}
 	@PostMapping(path = "/newRecord")
-	public ModelAndView newRecord(NewRecordModel model){
-		var viewAndModel = new ModelAndView("top-records");
-		viewAndModel.addObject("topRecord",model);
+	public ModelAndView newRecord(@Valid NewRecordModel newRecord, BindingResult result){
+		var viewAndModel = new ModelAndView();
+		if(result.hasErrors()) {
+			var model = new ModelAndView("redirect:newRecord");
+			model.addObject("errorMessage", "Please properly fill the fields!");
+			return model;
+		}
+		viewAndModel.addObject("topRecord",newRecord);
 		return viewAndModel;
 	}
 	@GetMapping(path = "/newRecord")
-	public ModelAndView newRecord(){
+	public ModelAndView newRecord(String errorMessage){
 		var books = bookRepository.findAll();
 		var bookNames = new LinkedList<String>();
-		for (var book: books) {
+		for (var book: books)
 			bookNames.add(book.getName());
-		}
 		var model = new NewRecordModel();
+		model.setErrorName(errorMessage);
 		model.setBooks(bookNames);
 		var viewAndModel = new ModelAndView("newRecord");
 		viewAndModel.addObject("newRecord",model);
