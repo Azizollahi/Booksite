@@ -4,6 +4,7 @@ import application.factories.TopRecordSatisfactory;
 import application.models.NewRecordModel;
 import application.models.TopRecordsModel;
 import domain_service_interfaces.top_records.RecordCalculator;
+import infrastructure.repository.BookRepository;
 import infrastructure.repository.RecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -19,11 +20,13 @@ import java.util.LinkedList;
 @RequestMapping(path = "/profile")
 public class ProfileController {
 	private final RecordRepository recordRepository;
+	private final BookRepository bookRepository;
 	private final RecordCalculator recordCalculator;
 	@Autowired
-	public ProfileController(RecordRepository recordRepository, RecordCalculator recordCalculator){
+	public ProfileController(RecordRepository recordRepository, BookRepository bookRepository, RecordCalculator recordCalculator){
 		this.recordRepository = recordRepository;
 		this.recordCalculator = recordCalculator;
+		this.bookRepository = bookRepository;
 	}
 
 	@GetMapping(path = "/topRecords")
@@ -48,15 +51,14 @@ public class ProfileController {
 	}
 	@GetMapping(path = "/newRecord")
 	public ModelAndView newRecord(){
-		var viewAndModel = new ModelAndView("newRecord");
+		var books = bookRepository.findAll();
+		var bookNames = new LinkedList<String>();
+		for (var book: books) {
+			bookNames.add(book.getName());
+		}
 		var model = new NewRecordModel();
-		model.setSelectedBook("DDD");
-		var books = new LinkedList<String>();
-		books.add("Clean Code");
-		books.add("Clean Coder");
-		books.add("PPP");
-		books.add("Pragmatic Programming");
-		model.setBooks(books);
+		model.setBooks(bookNames);
+		var viewAndModel = new ModelAndView("newRecord");
 		viewAndModel.addObject("newRecord",model);
 		return viewAndModel;
 	}
