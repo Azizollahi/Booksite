@@ -1,6 +1,7 @@
 package application.controllers;
 
 import application.factories.TopRecordSatisfactory;
+import application.models.NewRecordModel;
 import application.models.TopRecordsModel;
 import domain_service_interfaces.top_records.RecordCalculator;
 import infrastructure.repository.RecordRepository;
@@ -8,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.LinkedList;
 
 @Controller
 @RequestMapping(path = "/profile")
@@ -36,9 +40,25 @@ public class ProfileController {
 		viewAndModel.addObject("topRecord",model);
 		return viewAndModel;
 	}
+	@PostMapping(path = "/newRecord")
+	public ModelAndView newRecord(NewRecordModel model){
+		var viewAndModel = new ModelAndView("top-records");
+		viewAndModel.addObject("topRecord",model);
+		return viewAndModel;
+	}
 	@GetMapping(path = "/newRecord")
 	public ModelAndView newRecord(){
-		return new ModelAndView("newRecord");
+		var viewAndModel = new ModelAndView("newRecord");
+		var model = new NewRecordModel();
+		model.setSelectedBook("DDD");
+		var books = new LinkedList<String>();
+		books.add("Clean Code");
+		books.add("Clean Coder");
+		books.add("PPP");
+		books.add("Pragmatic Programming");
+		model.setBooks(books);
+		viewAndModel.addObject("newRecord",model);
+		return viewAndModel;
 	}
 	@GetMapping(path = "/newBook")
 	public ModelAndView newBook(){
