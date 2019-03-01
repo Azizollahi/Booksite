@@ -15,9 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 })
 public class Application {
 
-	public Application(){
-		SpringApplication.run(Application.class);
-	}
+	public Application(){ /* no arh constructor */ }
 	public static void main(String[] args){
 		SpringApplication.run(Application.class,args);
 	}
