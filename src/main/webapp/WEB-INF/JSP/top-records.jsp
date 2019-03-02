@@ -17,8 +17,7 @@
 								<th>Book Name</th>
 								<th>Page</th>
 								<th>Improvements</th>
-								<th>Current Update time</th>
-								<th>Last time update</th>
+								<th>Update time</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -30,7 +29,6 @@
 									<td>${topRecord.record.get(i).pageNumber}</td>
 									<td>${topRecord.record.get(i).improvement}</td>
 									<td>${topRecord.record.get(i).updateTime}</td>
-									<td>${topRecord.record.get(i).lastUpdate}</td>
 								</tr>
 							</c:forEach>
 						</c:if>

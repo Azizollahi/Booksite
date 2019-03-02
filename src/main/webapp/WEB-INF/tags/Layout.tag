@@ -23,8 +23,8 @@
 	</div>
 	<footer style="background-color: white" class="page-footer">
 		<div class="container">
-			<div class="grey-text">
-				<span class="right">Hossein Azizollahi (C) 2019 All rights reserved</span>
+			<div class="grey-text center-align">
+				<span class="">Hossein Azizollahi (C) 2019 All rights reserved</span>
 			</div>
 		</div>
 	</footer>

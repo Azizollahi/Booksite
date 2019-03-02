@@ -1,25 +1,40 @@
 package application.controllers;
 
 import application.factories.TopRecordSatisfactory;
+import application.models.NewRecordModel;
 import application.models.TopRecordsModel;
+import domain.Book;
+import domain.Record;
 import domain_service_interfaces.top_records.RecordCalculator;
+import infrastructure.repository.BookRepository;
 import infrastructure.repository.RecordRepository;
+import infrastructure.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
 
 @Controller
 @RequestMapping(path = "/profile")
 public class ProfileController {
 	private final RecordRepository recordRepository;
+	private final BookRepository bookRepository;
 	private final RecordCalculator recordCalculator;
+	private final UserRepository userRepository;
 	@Autowired
-	public ProfileController(RecordRepository recordRepository, RecordCalculator recordCalculator){
+	public ProfileController(RecordRepository recordRepository, BookRepository bookRepository, UserRepository userRepository, RecordCalculator recordCalculator){
 		this.recordRepository = recordRepository;
 		this.recordCalculator = recordCalculator;
+		this.bookRepository = bookRepository;
+		this.userRepository = userRepository;
 	}
 
 	@GetMapping(path = "/topRecords")
@@ -36,9 +51,40 @@ public class ProfileController {
 		viewAndModel.addObject("topRecord",model);
 		return viewAndModel;
 	}
+	@PostMapping(path = "/newRecord")
+	public ModelAndView newRecord(@Valid NewRecordModel newRecord, BindingResult result){
+		var viewAndModel = new ModelAndView();
+		if(result.hasErrors()) {
+			var model = new ModelAndView("redirect:newRecord");
+			model.addObject("errorMessage", "Please properly fill the fields!");
+			return model;
+		}
+		var records = recordRepository.findByBookNameAndUser(newRecord.getSelectedBook(), "Hey", Sort.by(Sort.Direction.DESC,"recordTime"));
+		var lastRecord = records.get(records.size()-1);
+		var record = new Record();
+		record.setRecordTime(LocalDateTime.now());
+		record.setLastRecordTime(lastRecord.getRecordTime());
+		record.setImprovement(newRecord.getPageNumber() - lastRecord.getPage());
+		record.setPage(newRecord.getPageNumber());
+		record.setBook(new Book(newRecord.getSelectedBook()));
+		var user = userRepository.findByUserName("Hey");
+		record.setUser(user);
+		recordRepository.save(record);
+		viewAndModel.addObject("topRecord",newRecord);
+		return viewAndModel;
+	}
 	@GetMapping(path = "/newRecord")
-	public ModelAndView newRecord(){
-		return new ModelAndView("newRecord");
+	public ModelAndView newRecord(String errorMessage){
+		var books = bookRepository.findAll();
+		var bookNames = new LinkedList<String>();
+		for (var book: books)
+			bookNames.add(book.getName());
+		var model = new NewRecordModel();
+		model.setErrorName(errorMessage);
+		model.setBooks(bookNames);
+		var viewAndModel = new ModelAndView("newRecord");
+		viewAndModel.addObject("newRecord",model);
+		return viewAndModel;
 	}
 	@GetMapping(path = "/newBook")
 	public ModelAndView newBook(){
