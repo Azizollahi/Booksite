@@ -3,6 +3,13 @@ package domain;
 import org.springframework.data.annotation.Id;
 
 public class User {
+	public User(){/* no arg constructor */}
+	public User(User user){
+		id = user.getId();
+		name = user.getName();
+		userName = user.getUserName();
+		password = user.getPassword();
+	}
 	@Id
 	private String id;
 	private String name;

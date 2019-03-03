@@ -1,5 +1,7 @@
 package application.controllers;
 
+import application.authorizations.Authorization;
+import application.exceptions.NotAuthorizedException;
 import application.factories.TopRecordSatisfactory;
 import application.models.NewRecordModel;
 import application.models.TopRecordsModel;
@@ -29,16 +31,20 @@ public class ProfileController {
 	private final BookRepository bookRepository;
 	private final RecordCalculator recordCalculator;
 	private final UserRepository userRepository;
+	private final Authorization authorization;
 	@Autowired
-	public ProfileController(RecordRepository recordRepository, BookRepository bookRepository, UserRepository userRepository, RecordCalculator recordCalculator){
+	public ProfileController(RecordRepository recordRepository, BookRepository bookRepository,
+							 UserRepository userRepository, RecordCalculator recordCalculator,
+							 Authorization authorization) {
 		this.recordRepository = recordRepository;
 		this.recordCalculator = recordCalculator;
 		this.bookRepository = bookRepository;
 		this.userRepository = userRepository;
+		this.authorization = authorization;
 	}
 
 	@GetMapping(path = "/topRecords")
-	public ModelAndView topRecords(){
+	public ModelAndView topRecords() {
 		var records = recordRepository.findAll(Sort.by(Sort.Direction.DESC,"recordTime"));
 		var model = new TopRecordsModel();
 		model.setAverageReading(recordCalculator.averageTotalReadOnADay(records));
@@ -52,14 +58,15 @@ public class ProfileController {
 		return viewAndModel;
 	}
 	@PostMapping(path = "/newRecord")
-	public ModelAndView newRecord(@Valid NewRecordModel newRecord, BindingResult result){
+	public ModelAndView newRecord(@Valid NewRecordModel newRecord, BindingResult result) throws NotAuthorizedException {
+		authorization.isAuthorizrd();
 		var viewAndModel = new ModelAndView();
 		if(result.hasErrors()) {
 			var model = new ModelAndView("redirect:newRecord");
 			model.addObject("errorMessage", "Please properly fill the fields!");
 			return model;
 		}
-		var records = recordRepository.findByBookNameAndUser(newRecord.getSelectedBook(), "Hey", Sort.by(Sort.Direction.DESC,"recordTime"));
+		var records = recordRepository.findByBookNameAndUser(newRecord.getSelectedBook(), authorization.getUser().getUserName(), Sort.by(Sort.Direction.DESC,"recordTime"));
 		var lastRecord = records.get(records.size()-1);
 		var record = new Record();
 		record.setRecordTime(LocalDateTime.now());
@@ -67,14 +74,15 @@ public class ProfileController {
 		record.setImprovement(newRecord.getPageNumber() - lastRecord.getPage());
 		record.setPage(newRecord.getPageNumber());
 		record.setBook(new Book(newRecord.getSelectedBook()));
-		var user = userRepository.findByUserName("Hey");
+		var user = userRepository.findByUserName(authorization.getUser().getUserName());
 		record.setUser(user);
 		recordRepository.save(record);
 		viewAndModel.addObject("topRecord",newRecord);
 		return viewAndModel;
 	}
 	@GetMapping(path = "/newRecord")
-	public ModelAndView newRecord(String errorMessage){
+	public ModelAndView newRecord(String errorMessage) throws NotAuthorizedException {
+		authorization.isAuthorizrd();
 		var books = bookRepository.findAll();
 		var bookNames = new LinkedList<String>();
 		for (var book: books)
@@ -85,13 +93,5 @@ public class ProfileController {
 		var viewAndModel = new ModelAndView("newRecord");
 		viewAndModel.addObject("newRecord",model);
 		return viewAndModel;
-	}
-	@GetMapping(path = "/newBook")
-	public ModelAndView newBook(){
-		return new ModelAndView("newBook");
-	}
-	@GetMapping(path = "/history")
-	public ModelAndView history(){
-		return new ModelAndView("history");
 	}
 }
