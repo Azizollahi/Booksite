@@ -2,9 +2,7 @@ package application.authorizations;
 
 import application.exceptions.NotAuthorizedException;
 import domain.User;
-import org.springframework.stereotype.Service;
 
-@Service
 public class ExpressAuthorization implements Authorization {
 	private User user;
 	@Override

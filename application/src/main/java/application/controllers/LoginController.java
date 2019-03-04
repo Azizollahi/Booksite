@@ -4,18 +4,21 @@ import application.authorizations.Authorization;
 import application.models.LoginModel;
 import infrastructure.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
-@Controller
+@Controller()
 @RequestMapping(path = "/auth")
+@Scope(value = WebApplicationContext.SCOPE_SESSION)
 public class LoginController {
 	UserRepository userRepository;
 	Authorization authorization;
@@ -31,7 +34,7 @@ public class LoginController {
 	public ModelAndView login(){
 		var viewAndModel = new ModelAndView(LOGIN_VIEW);
 		var model = new LoginModel();
-		model.setEmail("haha");
+		model.setEmail("");
 		viewAndModel.addObject(LOGIN_MODEL_NAME, model);
 		return viewAndModel;
 	}
